@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#070a0f" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <title>METAK // OIC Macro-Telemetry & Liable Law</title>
+  
+  <style>
+    :root {
+      --bg: #070a0f;
+      --card: #0e141f;
+      --card-hover: #151f30;
+      --accent-green: #00ff88;
+      --accent-gold: #ffb800;
+      --accent-cyan: #00f0ff;
+      --accent-red: #ff4757;
+      --border: #1a2638;
+      --text: #e2e8f0;
+      --muted: #8495a8;
+      --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      padding: 1rem;
+      padding-bottom: 6rem;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .top-badge-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .badge {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    .badge-green {
+      background: rgba(0, 255, 136, 0.12);
+      color: var(--accent-green);
+      border: 1px solid var(--accent-green);
+    }
+
+    .badge-red {
+      background: rgba(255, 71, 87, 0.12);
+      color: var(--accent-red);
+      border: 1px solid var(--accent-red);
+    }
+
+    h1 { font-family: var(--font-mono); font-size: 1.35rem; color: #fff; }
+    .subtitle { font-size: 0.82rem; color: var(--muted); margin-top: 0.25rem; line-height: 1.4; }
+
+    /* Interactive Section Toggle Tabs */
+    .view-toggle {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .view-btn {
+      flex: 1;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.65rem 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .view-btn.active {
+      border-color: var(--accent-cyan);
+      background: rgba(0, 240, 255, 0.08);
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 0.5rem;
+    }
+
+    /* Statute Row & Code Cards */
+    .statute-item {
+      background: #090e16;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent-red);
+      border-radius: 0 6px 6px 0;
+      padding: 0.85rem;
+      margin-bottom: 0.75rem;
+      font-family: var(--font-mono);
+    }
+
+    .statute-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.3rem;
+    }
+
+    .statute-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* Thesis Hypothesis Box */
+    .hypothesis-card {
+      border-left: 3px solid var(--accent-gold);
+      background: rgba(255, 184, 0, 0.04);
+      padding: 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin-top: 1rem;
+    }
+
+    .hypothesis-card h3 {
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+      color: var(--accent-gold);
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hypothesis-card p {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      margin-bottom: 0.75rem;
+    }
+
+    .hypothesis-card p:last-child { margin-bottom: 0; }
+
+    /* Node scroller for telemetry */
+    .node-scroll {
+      display: flex;
+      gap: 0.6rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      scrollbar-width: thin;
+    }
+
+    .node-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      white-space: nowrap;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      flex-shrink: 0;
+    }
+
+    .node-chip.active {
+      border-color: var(--accent-green);
+      background: rgba(0, 255, 136, 0.08);
+    }
+
+    .data-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .metric-cell {
+      background: #090e16;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      font-family: var(--font-mono);
+    }
+
+    .metric-cell .label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; }
+    .metric-cell .value { font-size: 1.15rem; font-weight: 700; margin-top: 0.2rem; }
+
+    .val-green { color: var(--accent-green); }
+    .val-gold { color: var(--accent-gold); }
+    .val-cyan { color: var(--accent-cyan); }
+    .val-red { color: var(--accent-red); }
+
+    /* Bottom Navigation */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(7, 10, 15, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.75rem 0;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      color: var(--muted);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      cursor: pointer;
+    }
+
+    .nav-btn.active { color: var(--accent-cyan); font-weight: 700; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="top-badge-row">
+      <span class="badge badge-green">METAK JURISPRUDENCE // 2026</span>
+      <span class="badge badge-red">EXTRATERRITORIAL AUDIT</span>
+    </div>
+    <h1>AGRARIAN SOVEREIGNTY & LIABLE LAW</h1>
+    <p class="subtitle">Statutory Review of U.S. Extraterritorial Narcotics Restrictions vs. Emerging Multilateral Sovereign Equity</p>
+  </header>
+
+  <!-- View Switcher -->
+  <div class="view-toggle">
+    <div class="view-btn active" id="btnTelemetry" onclick="switchView('telemetry')">
+      📊 Macro Telemetry
+    </div>
+    <div class="view-btn" id="btnLaw" onclick="switchView('law')">
+      ⚖️ Liable Law & Thesis
+    </div>
+  </div>
+
+  <!-- VIEW 1: MACRO TELEMETRY (HIDDEN WHEN LAW IS ACTIVE) -->
+  <div id="viewTelemetry">
+    <div class="node-scroll" id="nodeScroller">
+      <div class="node-chip active" onclick="selectCountry('morocco')">
+        <span style="font-weight:700; color:#fff;">Morocco (MA)</span>
+        <span style="font-size:0.7rem; color:var(--muted);">Law 13-21 // ANRAC</span>
+      </div>
+      <div class="node-chip" onclick="selectCountry('lebanon')">
+        <span style="font-weight:700; color:#fff;">Lebanon (LB)</span>
+        <span style="font-size:0.7rem; color:var(--muted);">Bekaa Valley Basin</span>
+      </div>
+      <div class="node-chip" onclick="selectCountry('afghanistan')">
+        <span style="font-weight:700; color:#fff;">Afghanistan (AF)</span>
+        <span style="font-size:0.7rem; color:var(--muted);">Central Asian Sinks</span>
+      </div>
+      <div class="node-chip" onclick="selectCountry('gulf')">
+        <span style="font-weight:700; color:#fff;">GCC Bloc (SA/QA/UAE)</span>
+        <span style="font-size:0.7rem; color:var(--muted);">Hydrocarbon Core</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span id="cardCountryName">Morocco // National Energy & Agrarian Profile</span>
+        <span style="color: var(--accent-gold); font-size: 0.72rem;" id="cardSubtext">AGRARIAN SOVEREIGNTY</span>
+      </div>
+      <div class="data-grid">
+        <div class="metric-cell">
+          <span class="label">Oil Output</span>
+          <div class="value val-cyan" id="metricOilBbl">~160 BBL/D</div>
+        </div>
+        <div class="metric-cell">
+          <span class="label">Agrarian Yield (Resin)</span>
+          <div class="value val-green" id="metricAgriYield">45,000 MT</div>
+        </div>
+        <div class="metric-cell">
+          <span class="label">Agrarian Market Cap</span>
+          <div class="value val-gold" id="metricAgriRev">$12.8B Est.</div>
+        </div>
+        <div class="metric-cell">
+          <span class="label">Carbon Sequestration Offset</span>
+          <div class="value val-green" id="metricSinkPct">82% Mitigated</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 2: LIABLE LAW & THESIS HYPOTHESIS -->
+  <div id="viewLaw" style="display: none;">
+    
+    <!-- U.S. Statutory Compendium -->
+    <div class="card">
+      <div class="card-title">
+        <span>🏛️ U.S. Statutory Barriers to Sovereign Agrarian Commerce</span>
+        <span class="val-red" style="font-size: 0.72rem;">FEDERAL RESTRICTIONS</span>
+      </div>
+
+      <div class="statute-item">
+        <div class="statute-header">
+          <span>21 U.S.C. § 812 // Controlled Substances Act (CSA)</span>
+          <span class="val-red">Schedule I</span>
+        </div>
+        <div class="statute-desc">
+          Strictly classifies cannabis and cannabis resin (hashish) as Schedule I substances having "no currently accepted medical use." Imposes strict domestic and border bans on import, export, and interstate transit, completely ignoring sovereign foreign legalizations (e.g., Morocco's Law 13-21).
+        </div>
+      </div>
+
+      <div class="statute-item">
+        <div class="statute-header">
+          <span>31 U.S.C. § 5311 // Bank Secrecy Act & FinCEN Mandates</span>
+          <span class="val-red">Banking Exclusion</span>
+        </div>
+        <div class="statute-desc">
+          Prohibits regulated financial institutions and global SWIFT correspondent banks from processing proceeds linked to foreign cannabis commerce. Subjecting foreign agricultural producers to Anti-Money Laundering (AML) freezes and capital isolation.
+        </div>
+      </div>
+
+      <div class="statute-item">
+        <div class="statute-header">
+          <span>21 U.S.C. § 1901 // Foreign Narcotics Kingpin Designation Act</span>
+          <span class="val-red">Extraterritorial Sanctions</span>
+        </div>
+        <div class="statute-desc">
+          Authorizes the U.S. Executive Branch (OFAC) to unilaterally freeze global assets and deny access to the U.S. financial system for foreign entities engaged in non-Western drug commerce without requiring multilateral judicial process.
+        </div>
+      </div>
+
+      <div class="statute-item">
+        <div class="statute-header">
+          <span>19 U.S.C. § 1595a // U.S. Tariff & Customs Forfeiture</span>
+          <span class="val-red">Maritime Seizure</span>
+        </div>
+        <div class="statute-desc">
+          Authorizes seizure, vessel forfeiture, and maritime interdiction of commercial cargo carrying Schedule I derivatives through international waters, enforcing unilateral customs policing over foreign agrarian trade routes.
+        </div>
+      </div>
+    </div>
+
+    <!-- The Global Backlash Thesis Hypothesis -->
+    <div class="hypothesis-card">
+      <h3>📜 Academic Thesis Hypothesis: The Impending Multilateral Backlash</h3>
+      <p>
+        <strong>Hypothesis Statement:</strong> The stark contradiction between the United States' domestic state-level commercialization of cannabis (generating $30B+ in corporate revenue for Western operators) and its continued weaponization of extraterritorial financial sanctions (FinCEN, OFAC, FATF) against traditional, non-Western agrarian societies (e.g., Morocco's Rif region, Lebanon's Bekaa, and Central Asia) is creating an unsustainable geopolitical double standard.
+      </p>
+      <p>
+        <strong>The Historical Racialized Foundation:</strong> The internationalization of cannabis prohibition was historically led by 20th-century U.S. federal enforcement (the Harry Anslinger doctrine and the 1961 UN Single Convention), which explicitly utilized xenophobic narratives to target Mexican, African American, and Middle Eastern cultural traditions while protecting domestic synthetic and pharmaceutical industries.
+      </p>
+      <p>
+        <strong>The Multilateral Crackdown Mechanism:</strong> As developing and OIC nations formalize their agricultural sovereignty (exemplified by Morocco's ANRAC regulatory body), the global community is mobilizing through three distinct international legal channels to challenge U.S. extraterritorial dominance:
+      </p>
+      <ul style="margin-left: 1.25rem; margin-bottom: 0.75rem; font-size: 0.8rem; line-height: 1.5; color: #cbd5e1;">
+        <li><strong>WTO National Treatment Violations (GATT Art. III):</strong> Challenging U.S. market exclusion as an illegal discriminatory trade barrier while U.S. multi-state corporations openly profit from the exact same commodity.</li>
+        <li><strong>UN Human Rights Council (UNHRC) Declarations:</strong> Condemning unilateral coercive economic sanctions on indigenous agrarian crops as economic warfare violating the Right to Development and Indigenous Cultural Integrity.</li>
+        <li><strong>BRICS & Non-Dollar Clearing Alliances:</strong> Establishing bilateral trade corridors settlement in local currencies (or digital sovereign bonds) to completely bypass U.S. FinCEN correspondent banking chokeholds.</li>
+      </ul>
+      <p>
+        <strong>Conclusion:</strong> The global stage is approaching a structural reckoning where unilateral U.S. statutory restrictions will be actively rejected by emerging economic blocs demanding agricultural parity, historical reparative justice, and respect for sovereign cultural staples.
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-bar">
+    <div class="nav-btn active" id="navTelemetry" onclick="switchView('telemetry')">
+      <span>📡</span>
+      <span>Macro Radar</span>
+    </div>
+    <div class="nav-btn" id="navLaw" onclick="switchView('law')">
+      <span>⚖️</span>
+      <span>Liable Law</span>
+    </div>
+  </nav>
+
+  <script>
+    function switchView(view) {
+      const isLaw = view === 'law';
+      document.getElementById('viewTelemetry').style.display = isLaw ? 'none' : 'block';
+      document.getElementById('viewLaw').style.display = isLaw ? 'block' : 'none';
+
+      document.getElementById('btnTelemetry').classList.toggle('active', !isLaw);
+      document.getElementById('btnLaw').classList.toggle('active', isLaw);
+
+      document.getElementById('navTelemetry').classList.toggle('active', !isLaw);
+      document.getElementById('navLaw').classList.toggle('active', isLaw);
+    }
+
+    const COUNTRY_DATA = {
+      morocco: {
+        name: "Morocco // National Energy & Agrarian Profile",
+        subtext: "AGRARIAN SOVEREIGNTY // LAW 13-21",
+        oilBbl: "~160 BBL/D",
+        agriYield: "45,000 MT",
+        agriRev: "$12.8B Est.",
+        sinkPct: "82% Mitigated"
+      },
+      lebanon: {
+        name: "Lebanon // Bekaa Valley Agricultural Corridor",
+        subtext: "MEDITERRANEAN AGRARIAN SINK",
+        oilBbl: "0 BBL/D",
+        agriYield: "4,200 MT",
+        agriRev: "$920M Est.",
+        sinkPct: "45% Mitigated"
+      },
+      afghanistan: {
+        name: "Afghanistan // Central Asian Resin Corridors",
+        subtext: "ARID HIGHLAND RESIN BASINS",
+        oilBbl: "~10,000 BBL/D",
+        agriYield: "1,800 MT",
+        agriRev: "$1.4B Est.",
+        sinkPct: "32% Mitigated"
+      },
+      gulf: {
+        name: "GCC Bloc // Saudi, Qatar, UAE Subsurface Capital",
+        subtext: "GLOBAL ENERGY HEADQUARTERS",
+        oilBbl: "13,500,000+ BBL/D",
+        agriYield: "0 MT",
+        agriRev: "$0.00",
+        sinkPct: "1% Mitigated"
+      }
+    };
+
+    function selectCountry(key) {
+      const data = COUNTRY_DATA[key];
+      if (!data) return;
+
+      document.getElementById('cardCountryName').textContent = data.name;
+      document.getElementById('cardSubtext').textContent = data.subtext;
+      document.getElementById('metricOilBbl').textContent = data.oilBbl;
+      document.getElementById('metricAgriYield').textContent = data.agriYield;
+      document.getElementById('metricAgriRev').textContent = data.agriRev;
+      document.getElementById('metricSinkPct').textContent = data.sinkPct;
+
+      document.querySelectorAll('.node-chip').forEach(chip => chip.classList.remove('active'));
+      const activeChip = Array.from(document.querySelectorAll('.node-chip')).find(c => c.textContent.toLowerCase().includes(key));
+      if (activeChip) activeChip.classList.add('active');
+    }
+  </script>
+</body>
+</html>
