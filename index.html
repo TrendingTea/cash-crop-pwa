@@ -2,480 +2,1106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#070a0f" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#06090e" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Metak Corridor" />
   <link rel="manifest" href="manifest.json" />
-  <title>METAK // OIC Macro-Telemetry & Liable Law</title>
+  <title>METAK // Agrarian & Energy Corridor</title>
   
   <style>
     :root {
-      --bg: #070a0f;
-      --card: #0e141f;
-      --card-hover: #151f30;
+      --bg-canvas: #030508;
+      --bg-mobile: #070b12;
+      --card: #0d131f;
+      --card-inner: #080c14;
+      --card-border: #162235;
       --accent-green: #00ff88;
+      --accent-green-dim: rgba(0, 255, 136, 0.12);
       --accent-gold: #ffb800;
+      --accent-gold-dim: rgba(255, 184, 0, 0.12);
       --accent-cyan: #00f0ff;
+      --accent-cyan-dim: rgba(0, 240, 255, 0.12);
       --accent-red: #ff4757;
-      --border: #1a2638;
-      --text: #e2e8f0;
-      --muted: #8495a8;
+      --accent-red-dim: rgba(255, 71, 87, 0.12);
+      --border: #182332;
+      --text: #e6edf3;
+      --text-muted: #8b9bb4;
       --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
-      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      --column-width: 520px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      background-color: var(--bg-canvas);
       color: var(--text);
       font-family: var(--font-sans);
-      padding: 1rem;
-      padding-bottom: 6rem;
+      font-size: 15px;
+      line-height: 1.5;
       min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    header {
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 1rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .top-badge-row {
+    body {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.5rem;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 10%, #0e1a2d 0%, #030508 70%);
+      background-attachment: fixed;
     }
 
-    .badge {
+    /* Mobile-Ready Central Column Architecture */
+    .app-shell {
+      width: 100%;
+      max-width: var(--column-width);
+      min-height: 100vh;
+      background: var(--bg-mobile);
+      border-left: 1px solid rgba(255, 255, 255, 0.04);
+      border-right: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.9);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: calc(5.2rem + env(safe-area-inset-bottom, 16px));
+    }
+
+    /* Top Sticky Status & Branding Header */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: rgba(7, 11, 18, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.85rem 1rem;
+    }
+
+    .status-beacon-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.4rem;
+    }
+
+    .beacon {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
       font-family: var(--font-mono);
       font-size: 0.68rem;
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      letter-spacing: 0.5px;
-      font-weight: 700;
-    }
-
-    .badge-green {
-      background: rgba(0, 255, 136, 0.12);
       color: var(--accent-green);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .beacon-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-green);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-green);
+      animation: pulse-beacon 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-beacon {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: 0.5; }
+    }
+
+    .install-pwa-btn {
+      background: var(--accent-green-dim);
       border: 1px solid var(--accent-green);
-    }
-
-    .badge-red {
-      background: rgba(255, 71, 87, 0.12);
-      color: var(--accent-red);
-      border: 1px solid var(--accent-red);
-    }
-
-    h1 { font-family: var(--font-mono); font-size: 1.35rem; color: #fff; }
-    .subtitle { font-size: 0.82rem; color: var(--muted); margin-top: 0.25rem; line-height: 1.4; }
-
-    /* Interactive Section Toggle Tabs */
-    .view-toggle {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .view-btn {
-      flex: 1;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.65rem 0.5rem;
+      color: var(--accent-green);
       font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--muted);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 20px;
       cursor: pointer;
-      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
       transition: all 0.2s;
     }
 
-    .view-btn.active {
-      border-color: var(--accent-cyan);
-      background: rgba(0, 240, 255, 0.08);
-      color: var(--accent-cyan);
-      font-weight: 700;
+    .install-pwa-btn:active {
+      transform: scale(0.95);
+      background: var(--accent-green);
+      color: #000;
     }
 
-    /* Cards */
-    .card {
+    .app-title {
+      font-family: var(--font-mono);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+      line-height: 1.25;
+    }
+
+    .app-subtitle {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 0.15rem;
+      line-height: 1.35;
+    }
+
+    /* Segmented Navigation Tab Pill Bar */
+    .nav-pill-bar {
+      display: flex;
+      gap: 0.4rem;
+      padding: 0.75rem 1rem 0.25rem 1rem;
+      position: sticky;
+      top: 4.8rem;
+      z-index: 85;
+      background: rgba(7, 11, 18, 0.96);
+      backdrop-filter: blur(12px);
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.55rem 0.4rem;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      transition: all 0.15s ease;
+      user-select: none;
     }
 
-    .card-title {
-      font-family: var(--font-mono);
-      font-size: 0.92rem;
+    .tab-btn:active {
+      transform: scale(0.97);
+    }
+
+    .tab-btn.active {
+      background: rgba(0, 240, 255, 0.09);
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.12);
+    }
+
+    /* Scrollable Body Content */
+    .app-body {
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Horizontal Country Chip Carousel */
+    .country-scroller {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.35rem;
+      margin: 0 -0.25rem;
+      padding: 0 0.25rem 0.5rem 0.25rem;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+    .country-scroller::-webkit-scrollbar { display: none; }
+
+    .country-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      min-width: 125px;
+      flex-shrink: 0;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      transition: all 0.2s ease;
+    }
+
+    .country-chip:active {
+      transform: scale(0.96);
+    }
+
+    .country-chip.active {
+      border-color: var(--accent-green);
+      background: rgba(0, 255, 136, 0.08);
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.15);
+    }
+
+    .country-chip .name {
+      font-size: 0.8rem;
+      font-weight: 700;
       color: #fff;
+    }
+
+    .country-chip .sub {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+    }
+
+    /* Card Components */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.85rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .card-header h2 {
+      font-family: var(--font-mono);
+      font-size: 0.88rem;
+      color: #fff;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .badge-pill {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-pill.gold { background: var(--accent-gold-dim); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+    .badge-pill.green { background: var(--accent-green-dim); color: var(--accent-green); border: 1px solid var(--accent-green); }
+    .badge-pill.red { background: var(--accent-red-dim); color: var(--accent-red); border: 1px solid var(--accent-red); }
+    .badge-pill.cyan { background: var(--accent-cyan-dim); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); }
+
+    /* 2x2 High-Density Telemetry Metrics */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .metric-box {
+      background: var(--card-inner);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 0.7rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-label {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .metric-value {
+      font-family: var(--font-mono);
+      font-size: 1.18rem;
+      font-weight: 800;
+      margin-top: 0.2rem;
+      line-height: 1.2;
+    }
+
+    .val-green { color: var(--accent-green); }
+    .val-cyan { color: var(--accent-cyan); }
+    .val-gold { color: var(--accent-gold); }
+    .val-red { color: var(--accent-red); }
+
+    /* Detailed Summary Note */
+    .detail-note {
+      background: var(--card-inner);
+      border-left: 3px solid var(--accent-cyan);
+      border-radius: 0 6px 6px 0;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.75rem;
+      color: #b0c0d4;
+      line-height: 1.45;
+    }
+
+    /* Interactive Offset Simulator Section */
+    .calc-slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .slider-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .slider-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+    }
+
+    .slider-title { color: var(--text-muted); }
+    .slider-readout { color: var(--accent-gold); font-weight: 700; }
+
+    input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #182538;
+      outline: none;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      cursor: pointer;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .calc-result-panel {
+      background: var(--card-inner);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 8px;
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .calc-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      padding-bottom: 0.5rem;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
     }
 
-    /* Statute Row & Code Cards */
-    .statute-item {
-      background: #090e16;
+    .calc-row.highlight {
+      border-top: 1px solid var(--border);
+      padding-top: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    /* Liable Law Statute Items */
+    .statute-card {
+      background: var(--card-inner);
       border: 1px solid var(--border);
       border-left: 3px solid var(--accent-red);
-      border-radius: 0 6px 6px 0;
+      border-radius: 0 8px 8px 0;
       padding: 0.85rem;
       margin-bottom: 0.75rem;
-      font-family: var(--font-mono);
     }
 
     .statute-header {
       display: flex;
       justify-content: space-between;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #fff;
+      align-items: baseline;
       margin-bottom: 0.3rem;
-    }
-
-    .statute-desc {
-      font-size: 0.72rem;
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    /* Thesis Hypothesis Box */
-    .hypothesis-card {
-      border-left: 3px solid var(--accent-gold);
-      background: rgba(255, 184, 0, 0.04);
-      padding: 1.25rem;
-      border-radius: 0 8px 8px 0;
-      margin-top: 1rem;
-    }
-
-    .hypothesis-card h3 {
       font-family: var(--font-mono);
-      font-size: 0.92rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .statute-text {
+      font-size: 0.74rem;
+      color: #9bb0c9;
+      line-height: 1.48;
+    }
+
+    /* Academic Thesis Section */
+    .thesis-box {
+      border: 1px solid rgba(255, 184, 0, 0.25);
+      border-left: 4px solid var(--accent-gold);
+      background: rgba(255, 184, 0, 0.03);
+      border-radius: 0 10px 10px 0;
+      padding: 1rem;
+    }
+
+    .thesis-box h3 {
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
       color: var(--accent-gold);
       margin-bottom: 0.6rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
     }
 
-    .hypothesis-card p {
-      font-size: 0.82rem;
-      line-height: 1.6;
-      color: #cbd5e1;
-      margin-bottom: 0.75rem;
-    }
-
-    .hypothesis-card p:last-child { margin-bottom: 0; }
-
-    /* Node scroller for telemetry */
-    .node-scroll {
-      display: flex;
-      gap: 0.6rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-      margin-bottom: 1rem;
-      scrollbar-width: thin;
-    }
-
-    .node-chip {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.5rem 0.85rem;
-      font-family: var(--font-mono);
+    .thesis-box p {
       font-size: 0.78rem;
-      white-space: nowrap;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 0.2rem;
-      flex-shrink: 0;
+      color: #cdd7e4;
+      line-height: 1.55;
+      margin-bottom: 0.65rem;
     }
 
-    .node-chip.active {
-      border-color: var(--accent-green);
-      background: rgba(0, 255, 136, 0.08);
+    .thesis-box ul {
+      margin-left: 1.2rem;
+      margin-bottom: 0.65rem;
+      font-size: 0.75rem;
+      color: #cdd7e4;
+      line-height: 1.5;
     }
 
-    .data-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-
-    .metric-cell {
-      background: #090e16;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 0.75rem;
-      font-family: var(--font-mono);
-    }
-
-    .metric-cell .label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; }
-    .metric-cell .value { font-size: 1.15rem; font-weight: 700; margin-top: 0.2rem; }
-
-    .val-green { color: var(--accent-green); }
-    .val-gold { color: var(--accent-gold); }
-    .val-cyan { color: var(--accent-cyan); }
-    .val-red { color: var(--accent-red); }
-
-    /* Bottom Navigation */
+    /* Fixed Central Mobile Dock Bar */
     .bottom-bar {
       position: fixed;
       bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(7, 10, 15, 0.95);
-      backdrop-filter: blur(12px);
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: var(--column-width);
+      background: rgba(7, 11, 18, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-around;
-      padding: 0.75rem 0;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
+      align-items: center;
+      padding: 0.65rem 0.5rem calc(0.65rem + env(safe-area-inset-bottom, 0px)) 0.5rem;
       z-index: 100;
     }
 
-    .nav-btn {
-      color: var(--muted);
+    .dock-btn {
+      color: var(--text-muted);
       text-decoration: none;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.2rem;
+      gap: 0.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
       cursor: pointer;
+      user-select: none;
+      flex: 1;
+      transition: all 0.15s;
     }
 
-    .nav-btn.active { color: var(--accent-cyan); font-weight: 700; }
+    .dock-btn:active {
+      transform: scale(0.92);
+    }
+
+    .dock-btn.active {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .dock-icon {
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    /* iOS Modal Installation Sheet */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      background: #0f1624;
+      border: 1px solid var(--border);
+      border-radius: 16px 16px 0 0;
+      width: 100%;
+      max-width: var(--column-width);
+      padding: 1.25rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom, 0px)) 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      animation: slide-up 0.25s ease-out;
+    }
+
+    @keyframes slide-up {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .sheet-title {
+      font-family: var(--font-mono);
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .sheet-step {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: #cbd5e1;
+    }
+
+    .sheet-step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--accent-cyan-dim);
+      color: var(--accent-cyan);
+      font-family: var(--font-mono);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .sheet-close-btn {
+      margin-top: 0.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="top-badge-row">
-      <span class="badge badge-green">METAK JURISPRUDENCE // 2026</span>
-      <span class="badge badge-red">EXTRATERRITORIAL AUDIT</span>
-    </div>
-    <h1>AGRARIAN SOVEREIGNTY & LIABLE LAW</h1>
-    <p class="subtitle">Statutory Review of U.S. Extraterritorial Narcotics Restrictions vs. Emerging Multilateral Sovereign Equity</p>
-  </header>
-
-  <!-- View Switcher -->
-  <div class="view-toggle">
-    <div class="view-btn active" id="btnTelemetry" onclick="switchView('telemetry')">
-      📊 Macro Telemetry
-    </div>
-    <div class="view-btn" id="btnLaw" onclick="switchView('law')">
-      ⚖️ Liable Law & Thesis
-    </div>
-  </div>
-
-  <!-- VIEW 1: MACRO TELEMETRY (HIDDEN WHEN LAW IS ACTIVE) -->
-  <div id="viewTelemetry">
-    <div class="node-scroll" id="nodeScroller">
-      <div class="node-chip active" onclick="selectCountry('morocco')">
-        <span style="font-weight:700; color:#fff;">Morocco (MA)</span>
-        <span style="font-size:0.7rem; color:var(--muted);">Law 13-21 // ANRAC</span>
-      </div>
-      <div class="node-chip" onclick="selectCountry('lebanon')">
-        <span style="font-weight:700; color:#fff;">Lebanon (LB)</span>
-        <span style="font-size:0.7rem; color:var(--muted);">Bekaa Valley Basin</span>
-      </div>
-      <div class="node-chip" onclick="selectCountry('afghanistan')">
-        <span style="font-weight:700; color:#fff;">Afghanistan (AF)</span>
-        <span style="font-size:0.7rem; color:var(--muted);">Central Asian Sinks</span>
-      </div>
-      <div class="node-chip" onclick="selectCountry('gulf')">
-        <span style="font-weight:700; color:#fff;">GCC Bloc (SA/QA/UAE)</span>
-        <span style="font-size:0.7rem; color:var(--muted);">Hydrocarbon Core</span>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-title">
-        <span id="cardCountryName">Morocco // National Energy & Agrarian Profile</span>
-        <span style="color: var(--accent-gold); font-size: 0.72rem;" id="cardSubtext">AGRARIAN SOVEREIGNTY</span>
-      </div>
-      <div class="data-grid">
-        <div class="metric-cell">
-          <span class="label">Oil Output</span>
-          <div class="value val-cyan" id="metricOilBbl">~160 BBL/D</div>
-        </div>
-        <div class="metric-cell">
-          <span class="label">Agrarian Yield (Resin)</span>
-          <div class="value val-green" id="metricAgriYield">45,000 MT</div>
-        </div>
-        <div class="metric-cell">
-          <span class="label">Agrarian Market Cap</span>
-          <div class="value val-gold" id="metricAgriRev">$12.8B Est.</div>
-        </div>
-        <div class="metric-cell">
-          <span class="label">Carbon Sequestration Offset</span>
-          <div class="value val-green" id="metricSinkPct">82% Mitigated</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- VIEW 2: LIABLE LAW & THESIS HYPOTHESIS -->
-  <div id="viewLaw" style="display: none;">
+  <!-- Central Column Scroll Container -->
+  <main class="app-shell">
     
-    <!-- U.S. Statutory Compendium -->
-    <div class="card">
-      <div class="card-title">
-        <span>🏛️ U.S. Statutory Barriers to Sovereign Agrarian Commerce</span>
-        <span class="val-red" style="font-size: 0.72rem;">FEDERAL RESTRICTIONS</span>
+    <!-- Top Sticky Header -->
+    <header class="app-header">
+      <div class="status-beacon-row">
+        <div class="beacon">
+          <span class="beacon-dot"></span>
+          <span>OIC SOVEREIGN RADAR // LIVE</span>
+        </div>
+        <button class="install-pwa-btn" id="pwaInstallTrigger" onclick="triggerPWAInstall()">
+          <span>⚡</span>
+          <span id="installLabel">Install PWA</span>
+        </button>
       </div>
+      <h1 class="app-title">METAK // AGRARIAN & ENERGY CORRIDOR</h1>
+      <p class="app-subtitle">Sovereign Agrarian Telemetry · Hydrocarbon Logistics · Liable Law Matrix</p>
+    </header>
 
-      <div class="statute-item">
-        <div class="statute-header">
-          <span>21 U.S.C. § 812 // Controlled Substances Act (CSA)</span>
-          <span class="val-red">Schedule I</span>
+    <!-- Top Sticky Segmented Tab Bar -->
+    <nav class="nav-pill-bar">
+      <button class="tab-btn active" id="tabTelemetry" onclick="selectTab('telemetry')">
+        <span>📡</span> Telemetry
+      </button>
+      <button class="tab-btn" id="tabCalc" onclick="selectTab('calc')">
+        <span>🌱</span> Sink Calc
+      </button>
+      <button class="tab-btn" id="tabLaw" onclick="selectTab('law')">
+        <span>⚖️</span> Liable Law
+      </button>
+    </nav>
+
+    <!-- Main Scroll Body -->
+    <div class="app-body">
+
+      <!-- ================= SECTION 1: MACRO TELEMETRY ================= -->
+      <section id="secTelemetry">
+        
+        <!-- Sovereign Nation Carousel -->
+        <div class="country-scroller" id="countryScroller">
+          <div class="country-chip active" onclick="pickCountry('morocco')">
+            <span class="name">🇲🇦 Morocco</span>
+            <span class="sub">Law 13-21 / ANRAC</span>
+          </div>
+          <div class="country-chip" onclick="pickCountry('lebanon')">
+            <span class="name">🇱🇧 Lebanon</span>
+            <span class="sub">Bekaa Valley Basin</span>
+          </div>
+          <div class="country-chip" onclick="pickCountry('afghanistan')">
+            <span class="name">🇦🇫 Afghanistan</span>
+            <span class="sub">Central Resin Sinks</span>
+          </div>
+          <div class="country-chip" onclick="pickCountry('pakistan')">
+            <span class="name">🇵🇰 Pakistan</span>
+            <span class="sub">Tirah Agrarian Belt</span>
+          </div>
+          <div class="country-chip" onclick="pickCountry('gulf')">
+            <span class="name">🇸🇦 GCC Bloc</span>
+            <span class="sub">Hydrocarbon Core</span>
+          </div>
         </div>
-        <div class="statute-desc">
-          Strictly classifies cannabis and cannabis resin (hashish) as Schedule I substances having "no currently accepted medical use." Imposes strict domestic and border bans on import, export, and interstate transit, completely ignoring sovereign foreign legalizations (e.g., Morocco's Law 13-21).
+
+        <!-- Telemetry Data Display Card -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h2 id="dispCountryName">Morocco // Energy & Agrarian Profile</h2>
+              <span style="font-size:0.7rem; color:var(--text-muted);" id="dispRegionTag">Rif Mountain Basins · Chefchaouen · Al Hoceima</span>
+            </div>
+            <span class="badge-pill green" id="dispBadge">LEGAL AGRARIAN</span>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric-box">
+              <span class="metric-label">Crude Oil Output</span>
+              <span class="metric-value val-cyan" id="valOil">~160 BBL/D</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Agrarian Yield (Resin)</span>
+              <span class="metric-value val-green" id="valYield">45,000 MT</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Agrarian Market Cap</span>
+              <span class="metric-value val-gold" id="valRev">$12.8B Est.</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-label">Carbon Sink Offset</span>
+              <span class="metric-value val-green" id="valSink">82% Mitigated</span>
+            </div>
+          </div>
+
+          <div class="detail-note" id="dispNote">
+            Morocco's landmark Law 13-21 enacted under the National Agency for the Regulation of Activities Related to Cannabis (ANRAC) formalized over 55,000 agrarian households, coupling traditional resin yields directly with European pharmaceutical and green construction corridors.
+          </div>
         </div>
+
+        <!-- Global Sovereign Comparison Radar -->
+        <div class="card">
+          <div class="card-header">
+            <h2>🌐 Macro Market Comparative Ratio</h2>
+            <span class="badge-pill cyan">OIC BLOC</span>
+          </div>
+          <div style="font-size:0.75rem; color:#a0b2c6; line-height:1.45; margin-bottom:0.75rem;">
+            Comparative ratio of annual hydrocarbon revenues versus sovereign agrarian cash crop output across traditional producer states:
+          </div>
+          
+          <div style="display:flex; flex-direction:column; gap:0.6rem; font-family:var(--font-mono); font-size:0.72rem;">
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;">
+                <span>Morocco (MA)</span>
+                <span class="val-green">Agrarian 94% / Oil 6%</span>
+              </div>
+              <div style="height:6px; background:#182538; border-radius:3px; overflow:hidden; display:flex;">
+                <div style="width:94%; background:var(--accent-green);"></div>
+                <div style="width:6%; background:var(--accent-cyan);"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;">
+                <span>Lebanon (LB)</span>
+                <span class="val-green">Agrarian 99% / Oil 1%</span>
+              </div>
+              <div style="height:6px; background:#182538; border-radius:3px; overflow:hidden; display:flex;">
+                <div style="width:99%; background:var(--accent-green);"></div>
+                <div style="width:1%; background:var(--accent-cyan);"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;">
+                <span>Afghanistan (AF)</span>
+                <span class="val-green">Agrarian 88% / Oil 12%</span>
+              </div>
+              <div style="height:6px; background:#182538; border-radius:3px; overflow:hidden; display:flex;">
+                <div style="width:88%; background:var(--accent-green);"></div>
+                <div style="width:12%; background:var(--accent-cyan);"></div>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex; justify-content:space-between; margin-bottom:0.2rem;">
+                <span>GCC Core (SA/QA/UAE)</span>
+                <span class="val-cyan">Oil 99.8% / Agrarian 0.2%</span>
+              </div>
+              <div style="height:6px; background:#182538; border-radius:3px; overflow:hidden; display:flex;">
+                <div style="width:0.2%; background:var(--accent-green);"></div>
+                <div style="width:99.8%; background:var(--accent-cyan);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ================= SECTION 2: SINK & ECONOMIC CALCULATOR ================= -->
+      <section id="secCalc" style="display: none;">
+        <div class="card">
+          <div class="card-header">
+            <h2>🧮 Hydrocarbon Carbon Sink Simulator</h2>
+            <span class="badge-pill gold">REAL-TIME MODEL</span>
+          </div>
+
+          <p style="font-size:0.75rem; color:#9cb2c9; margin-bottom:1rem; line-height:1.45;">
+            Industrial hemp and resin canopy sequester approximately <strong>15.0 metric tons of CO2 per hectare</strong> per annum—quadruple the carbon absorption rate of boreal forests. Model how agrarian cultivation directly mitigates petroleum combustion emissions:
+          </p>
+
+          <div class="calc-slider-group">
+            <div class="slider-item">
+              <div class="slider-label-row">
+                <span class="slider-title">Monthly Petroleum Fuel (Gallons)</span>
+                <span class="slider-readout" id="readoutFuel">60 gal</span>
+              </div>
+              <input type="range" id="sliderFuel" min="10" max="1000" step="5" value="60" oninput="runCalculator()" />
+            </div>
+
+            <div class="slider-item">
+              <div class="slider-label-row">
+                <span class="slider-title">Sponsored Cultivation (Hectares)</span>
+                <span class="slider-readout" id="readoutHectares">0.50 ha</span>
+              </div>
+              <input type="range" id="sliderHectares" min="0.05" max="10" step="0.05" value="0.50" oninput="runCalculator()" />
+            </div>
+          </div>
+
+          <div class="calc-result-panel">
+            <div class="calc-row">
+              <span style="color:var(--text-muted);">Fuel CO2 Footprint:</span>
+              <span class="val-red" id="calcFuelCO2">0.53 MT / yr</span>
+            </div>
+            <div class="calc-row">
+              <span style="color:var(--text-muted);">Hemp Canopy Sequestration:</span>
+              <span class="val-green" id="calcSequestration">7.50 MT / yr</span>
+            </div>
+            <div class="calc-row">
+              <span style="color:var(--text-muted);">Agrarian Producer Revenue:</span>
+              <span class="val-gold" id="calcProducerRev">$2,250 / yr</span>
+            </div>
+            <div class="calc-row highlight">
+              <span>Net Carbon Status:</span>
+              <span class="val-green" id="calcNetStatus">1,415% NET NEGATIVE</span>
+            </div>
+          </div>
+
+          <div class="detail-note" style="margin-top:0.85rem; border-color:var(--accent-green);">
+            <strong>The Sovereign Barter Parity:</strong> By linking $1.00 of consumer fuel tax savings directly into verifiable indigenous agrarian acreage, the energy supply chain transitions from extractive Western financial chokeholds into an autonomous bilateral carbon sink.
+          </div>
+        </div>
+      </section>
+
+
+      <!-- ================= SECTION 3: LIABLE LAW & THESIS ================= -->
+      <section id="secLaw" style="display: none;">
+        
+        <div class="card">
+          <div class="card-header">
+            <h2>🏛️ U.S. Extraterritorial Statutory Matrix</h2>
+            <span class="badge-pill red">LIABLE LAW</span>
+          </div>
+
+          <div class="statute-card">
+            <div class="statute-header">
+              <span style="color:#fff;">21 U.S.C. § 812 // CSA Schedule I</span>
+              <span class="val-red">Strict Border Exclusion</span>
+            </div>
+            <p class="statute-text">
+              Arbitrarily categorizes whole cannabis and resin as having "no accepted medical use." Imposes sweeping federal border interdiction against sovereign foreign legal commodities (e.g., Morocco Law 13-21) while 38+ U.S. states commercially license domestic multi-state corporate operators.
+            </p>
+          </div>
+
+          <div class="statute-card">
+            <div class="statute-header">
+              <span style="color:#fff;">31 U.S.C. § 5311 // BSA & FinCEN Bans</span>
+              <span class="val-red">SWIFT Chokehold</span>
+            </div>
+            <p class="statute-text">
+              Weaponizes U.S. dollar clearing corridors against foreign agricultural banks processing cannabis revenues. Enforces unilateral de-risking and freezing of lawful Middle Eastern trade settlements under the guise of AML/CFT enforcement.
+            </p>
+          </div>
+
+          <div class="statute-card">
+            <div class="statute-header">
+              <span style="color:#fff;">21 U.S.C. § 1901 // Foreign Narcotics Kingpin Act</span>
+              <span class="val-red">OFAC Asset Freezes</span>
+            </div>
+            <p class="statute-text">
+              Grants unilateral presidential power to seize foreign assets and bar international trade participants without requirement of multilateral trial or evidentiary review, historically applied selectively to Global South agrarian networks.
+            </p>
+          </div>
+
+          <div class="statute-card">
+            <div class="statute-header">
+              <span style="color:#fff;">19 U.S.C. § 1595a // Tariff & Customs Seizure</span>
+              <span class="val-red">Maritime Forfeiture</span>
+            </div>
+            <p class="statute-text">
+              Mandates maritime forfeiture of commercial cargo and transport vessels in international transit, asserting extraterritorial jurisdiction across oceanic trade corridors.
+            </p>
+          </div>
+        </div>
+
+        <!-- Academic Thesis Hypothesis -->
+        <div class="thesis-box">
+          <h3>📜 Multilateral Antitrust & Trade Backlash Hypothesis</h3>
+          <p>
+            <strong>Core Thesis:</strong> The profound contradiction between the United States' domestic commercialization of cannabis ($30B+ domestic corporate market) and its aggressive extraterritorial weaponization of financial embargoes against traditional Global South agrarian cultures is catalyzing an international legal and economic rupture.
+          </p>
+          <p>
+            <strong>Multilateral Countermeasures in Motion:</strong>
+          </p>
+          <ul>
+            <li><strong>WTO GATT Article III (National Treatment):</strong> Sovereign states possess clear grounds to challenge U.S. border exclusions as discriminatory non-tariff trade barriers favoring domestic U.S. producers over foreign agrarian imports.</li>
+            <li><strong>UN Single Convention 1961 (Article 28 Exemption):</strong> Utilizing explicit treaty allowances for industrial and horticultural cannabis to invalidate unilateral U.S. sanctions regimes.</li>
+            <li><strong>mBridge & De-Dollarized Clearing:</strong> Bypassing FinCEN SWIFT chokeholds by clearing agrarian and petroleum swaps through bilateral local currency settlement.</li>
+          </ul>
+          <p style="margin-bottom:0;">
+            <strong>Verdict:</strong> The sovereign reclamation of agrarian staple crops by Morocco, Lebanon, and OIC trade corridors signals the terminal phase of unilateral Western economic hegemony over global botanical cash crops.
+          </p>
+        </div>
+
+      </section>
+
+    </div><!-- /app-body -->
+
+    <!-- Fixed Central Mobile Dock Bar -->
+    <nav class="bottom-bar">
+      <div class="dock-btn active" id="dockTelemetry" onclick="selectTab('telemetry')">
+        <span class="dock-icon">📡</span>
+        <span>Radar</span>
       </div>
-
-      <div class="statute-item">
-        <div class="statute-header">
-          <span>31 U.S.C. § 5311 // Bank Secrecy Act & FinCEN Mandates</span>
-          <span class="val-red">Banking Exclusion</span>
-        </div>
-        <div class="statute-desc">
-          Prohibits regulated financial institutions and global SWIFT correspondent banks from processing proceeds linked to foreign cannabis commerce. Subjecting foreign agricultural producers to Anti-Money Laundering (AML) freezes and capital isolation.
-        </div>
+      <div class="dock-btn" id="dockCalc" onclick="selectTab('calc')">
+        <span class="dock-icon">🌱</span>
+        <span>Offset</span>
       </div>
-
-      <div class="statute-item">
-        <div class="statute-header">
-          <span>21 U.S.C. § 1901 // Foreign Narcotics Kingpin Designation Act</span>
-          <span class="val-red">Extraterritorial Sanctions</span>
-        </div>
-        <div class="statute-desc">
-          Authorizes the U.S. Executive Branch (OFAC) to unilaterally freeze global assets and deny access to the U.S. financial system for foreign entities engaged in non-Western drug commerce without requiring multilateral judicial process.
-        </div>
+      <div class="dock-btn" id="dockLaw" onclick="selectTab('law')">
+        <span class="dock-icon">⚖️</span>
+        <span>Law</span>
       </div>
+      <div class="dock-btn" onclick="triggerPWAInstall()">
+        <span class="dock-icon">📱</span>
+        <span>Install</span>
+      </div>
+    </nav>
 
-      <div class="statute-item">
-        <div class="statute-header">
-          <span>19 U.S.C. § 1595a // U.S. Tariff & Customs Forfeiture</span>
-          <span class="val-red">Maritime Seizure</span>
+    <!-- iOS Add to Home Screen Modal Sheet -->
+    <div class="modal-overlay" id="pwaModal">
+      <div class="modal-sheet">
+        <div class="sheet-title">Install Metak Corridor PWA</div>
+        <div class="sheet-step">
+          <div class="sheet-step-num">1</div>
+          <div>Tap the <strong>Share</strong> icon (square with arrow ⎋) in your browser bar.</div>
         </div>
-        <div class="statute-desc">
-          Authorizes seizure, vessel forfeiture, and maritime interdiction of commercial cargo carrying Schedule I derivatives through international waters, enforcing unilateral customs policing over foreign agrarian trade routes.
+        <div class="sheet-step">
+          <div class="sheet-step-num">2</div>
+          <div>Scroll down and select <strong>"Add to Home Screen"</strong> (⊞).</div>
         </div>
+        <div class="sheet-step">
+          <div class="sheet-step-num">3</div>
+          <div>Launch directly from your home screen for full standalone telemetry.</div>
+        </div>
+        <button class="sheet-close-btn" onclick="closePWAModal()">Dismiss</button>
       </div>
     </div>
 
-    <!-- The Global Backlash Thesis Hypothesis -->
-    <div class="hypothesis-card">
-      <h3>📜 Academic Thesis Hypothesis: The Impending Multilateral Backlash</h3>
-      <p>
-        <strong>Hypothesis Statement:</strong> The stark contradiction between the United States' domestic state-level commercialization of cannabis (generating $30B+ in corporate revenue for Western operators) and its continued weaponization of extraterritorial financial sanctions (FinCEN, OFAC, FATF) against traditional, non-Western agrarian societies (e.g., Morocco's Rif region, Lebanon's Bekaa, and Central Asia) is creating an unsustainable geopolitical double standard.
-      </p>
-      <p>
-        <strong>The Historical Racialized Foundation:</strong> The internationalization of cannabis prohibition was historically led by 20th-century U.S. federal enforcement (the Harry Anslinger doctrine and the 1961 UN Single Convention), which explicitly utilized xenophobic narratives to target Mexican, African American, and Middle Eastern cultural traditions while protecting domestic synthetic and pharmaceutical industries.
-      </p>
-      <p>
-        <strong>The Multilateral Crackdown Mechanism:</strong> As developing and OIC nations formalize their agricultural sovereignty (exemplified by Morocco's ANRAC regulatory body), the global community is mobilizing through three distinct international legal channels to challenge U.S. extraterritorial dominance:
-      </p>
-      <ul style="margin-left: 1.25rem; margin-bottom: 0.75rem; font-size: 0.8rem; line-height: 1.5; color: #cbd5e1;">
-        <li><strong>WTO National Treatment Violations (GATT Art. III):</strong> Challenging U.S. market exclusion as an illegal discriminatory trade barrier while U.S. multi-state corporations openly profit from the exact same commodity.</li>
-        <li><strong>UN Human Rights Council (UNHRC) Declarations:</strong> Condemning unilateral coercive economic sanctions on indigenous agrarian crops as economic warfare violating the Right to Development and Indigenous Cultural Integrity.</li>
-        <li><strong>BRICS & Non-Dollar Clearing Alliances:</strong> Establishing bilateral trade corridors settlement in local currencies (or digital sovereign bonds) to completely bypass U.S. FinCEN correspondent banking chokeholds.</li>
-      </ul>
-      <p>
-        <strong>Conclusion:</strong> The global stage is approaching a structural reckoning where unilateral U.S. statutory restrictions will be actively rejected by emerging economic blocs demanding agricultural parity, historical reparative justice, and respect for sovereign cultural staples.
-      </p>
-    </div>
-
-  </div>
-
-  <!-- Bottom Navigation -->
-  <nav class="bottom-bar">
-    <div class="nav-btn active" id="navTelemetry" onclick="switchView('telemetry')">
-      <span>📡</span>
-      <span>Macro Radar</span>
-    </div>
-    <div class="nav-btn" id="navLaw" onclick="switchView('law')">
-      <span>⚖️</span>
-      <span>Liable Law</span>
-    </div>
-  </nav>
+  </main>
 
   <script>
-    function switchView(view) {
-      const isLaw = view === 'law';
-      document.getElementById('viewTelemetry').style.display = isLaw ? 'none' : 'block';
-      document.getElementById('viewLaw').style.display = isLaw ? 'block' : 'none';
-
-      document.getElementById('btnTelemetry').classList.toggle('active', !isLaw);
-      document.getElementById('btnLaw').classList.toggle('active', isLaw);
-
-      document.getElementById('navTelemetry').classList.toggle('active', !isLaw);
-      document.getElementById('navLaw').classList.toggle('active', isLaw);
+    // Tab View Controller
+    function selectTab(tab) {
+      const tabs = ['telemetry', 'calc', 'law'];
+      tabs.forEach(t => {
+        const sec = document.getElementById('sec' + t.charAt(0).toUpperCase() + t.slice(1));
+        const topBtn = document.getElementById('tab' + t.charAt(0).toUpperCase() + t.slice(1));
+        const dockBtn = document.getElementById('dock' + t.charAt(0).toUpperCase() + t.slice(1));
+        
+        const isActive = (t === tab);
+        if (sec) sec.style.display = isActive ? 'block' : 'none';
+        if (topBtn) topBtn.classList.toggle('active', isActive);
+        if (dockBtn) dockBtn.classList.toggle('active', isActive);
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // National Sovereign Telemetry Dataset
     const COUNTRY_DATA = {
       morocco: {
-        name: "Morocco // National Energy & Agrarian Profile",
-        subtext: "AGRARIAN SOVEREIGNTY // LAW 13-21",
-        oilBbl: "~160 BBL/D",
-        agriYield: "45,000 MT",
-        agriRev: "$12.8B Est.",
-        sinkPct: "82% Mitigated"
+        name: "Morocco // Energy & Agrarian Profile",
+        region: "Rif Mountain Basins · Chefchaouen · Al Hoceima",
+        badge: "LEGAL AGRARIAN",
+        badgeColor: "green",
+        oil: "~160 BBL/D",
+        yield: "45,000 MT",
+        rev: "$12.8B Est.",
+        sink: "82% Mitigated",
+        note: "Morocco's landmark Law 13-21 enacted under ANRAC formalized over 55,000 agrarian households, coupling traditional resin yields directly with European pharmaceutical and green construction corridors."
       },
       lebanon: {
-        name: "Lebanon // Bekaa Valley Agricultural Corridor",
-        subtext: "MEDITERRANEAN AGRARIAN SINK",
-        oilBbl: "0 BBL/D",
-        agriYield: "4,200 MT",
-        agriRev: "$920M Est.",
-        sinkPct: "45% Mitigated"
+        name: "Lebanon // Bekaa Valley Corridor",
+        region: "Bekaa Plain · Baalbek-Hermel Basin",
+        badge: "MEDITERRANEAN SINK",
+        badgeColor: "cyan",
+        oil: "0 BBL/D",
+        yield: "4,200 MT",
+        rev: "$920M Est.",
+        sink: "45% Mitigated",
+        note: "Passed Law 178 legalizing medicinal cultivation to revitalize agrarian banking. The fertile Bekaa basin serves as a biological carbon and economic sink mitigating national energy import crises."
       },
       afghanistan: {
-        name: "Afghanistan // Central Asian Resin Corridors",
-        subtext: "ARID HIGHLAND RESIN BASINS",
-        oilBbl: "~10,000 BBL/D",
-        agriYield: "1,800 MT",
-        agriRev: "$1.4B Est.",
-        sinkPct: "32% Mitigated"
+        name: "Afghanistan // Central Asian Corridors",
+        region: "Balkh · Kandahar · Mazar-i-Sharif Highland Basins",
+        badge: "ARID HIGHLAND RESIN",
+        badgeColor: "gold",
+        oil: "~10,000 BBL/D",
+        yield: "1,800 MT",
+        rev: "$1.4B Est.",
+        sink: "32% Mitigated",
+        note: "Ancient drought-resilient landrace cultivars provide biological nitrogen fixing across arid highlands, presenting significant untapped industrial hemp re-cultivation potential."
+      },
+      pakistan: {
+        name: "Pakistan // Tirah Agrarian Belt",
+        region: "Khyber Tribal District · Indus Agricultural Tributaries",
+        badge: "INDUS BOTANICAL",
+        badgeColor: "gold",
+        oil: "~75,000 BBL/D",
+        yield: "2,100 MT",
+        rev: "$850M Est.",
+        sink: "28% Mitigated",
+        note: "Federal initiatives exploring industrial hemp fibers for textile export, pairing indigenous Indus farming heritage with modern technical carbon-negative fabrics."
       },
       gulf: {
-        name: "GCC Bloc // Saudi, Qatar, UAE Subsurface Capital",
-        subtext: "GLOBAL ENERGY HEADQUARTERS",
-        oilBbl: "13,500,000+ BBL/D",
-        agriYield: "0 MT",
-        agriRev: "$0.00",
-        sinkPct: "1% Mitigated"
+        name: "GCC Bloc // Hydrocarbon Capital",
+        region: "Saudi Arabia · Qatar · United Arab Emirates",
+        badge: "ENERGY HEADQUARTERS",
+        badgeColor: "cyan",
+        oil: "13,500,000+ BBL/D",
+        yield: "0 MT",
+        rev: "$0.00",
+        sink: "1% Mitigated",
+        note: "Global petroleum headquarters possessing immense sovereign wealth fund liquidity currently deploying into cross-border biological carbon offsets and sovereign Middle Eastern agrarian investments."
       }
     };
 
-    function selectCountry(key) {
+    function pickCountry(key) {
       const data = COUNTRY_DATA[key];
       if (!data) return;
 
-      document.getElementById('cardCountryName').textContent = data.name;
-      document.getElementById('cardSubtext').textContent = data.subtext;
-      document.getElementById('metricOilBbl').textContent = data.oilBbl;
-      document.getElementById('metricAgriYield').textContent = data.agriYield;
-      document.getElementById('metricAgriRev').textContent = data.agriRev;
-      document.getElementById('metricSinkPct').textContent = data.sinkPct;
+      document.getElementById('dispCountryName').textContent = data.name;
+      document.getElementById('dispRegionTag').textContent = data.region;
+      
+      const badge = document.getElementById('dispBadge');
+      badge.textContent = data.badge;
+      badge.className = `badge-pill ${data.badgeColor}`;
 
-      document.querySelectorAll('.node-chip').forEach(chip => chip.classList.remove('active'));
-      const activeChip = Array.from(document.querySelectorAll('.node-chip')).find(c => c.textContent.toLowerCase().includes(key));
+      document.getElementById('valOil').textContent = data.oil;
+      document.getElementById('valYield').textContent = data.yield;
+      document.getElementById('valRev').textContent = data.rev;
+      document.getElementById('valSink').textContent = data.sink;
+      document.getElementById('dispNote').textContent = data.note;
+
+      document.querySelectorAll('.country-chip').forEach(c => c.classList.remove('active'));
+      const activeChip = Array.from(document.querySelectorAll('.country-chip')).find(c => c.getAttribute('onclick').includes(key));
       if (activeChip) activeChip.classList.add('active');
     }
+
+    // Real-Time Hydrocarbon Carbon Sink Calculator
+    function runCalculator() {
+      const fuelGal = parseFloat(document.getElementById('sliderFuel').value);
+      const hectares = parseFloat(document.getElementById('sliderHectares').value);
+
+      document.getElementById('readoutFuel').textContent = `${fuelGal} gal`;
+      document.getElementById('readoutHectares').textContent = `${hectares.toFixed(2)} ha`;
+
+      // 1 gallon of gasoline ≈ 8.887 kg CO2 => ~0.008887 metric tons CO2
+      // Annual fuel CO2 = (fuelGal * 12) * 0.008887
+      const annualFuelCO2 = (fuelGal * 12 * 0.008887);
+
+      // 1 hectare of hemp sequester ≈ 15.0 metric tons CO2 per annum
+      const annualSequestration = hectares * 15.0;
+
+      // Estimated farmgate gross revenue per hectare ≈ $4,500
+      const producerRev = hectares * 4500;
+
+      const netRatio = Math.round((annualSequestration / annualFuelCO2) * 100);
+
+      document.getElementById('calcFuelCO2').textContent = `${annualFuelCO2.toFixed(2)} MT / yr`;
+      document.getElementById('calcSequestration').textContent = `${annualSequestration.toFixed(2)} MT / yr`;
+      document.getElementById('calcProducerRev').textContent = `$${Math.round(producerRev).toLocaleString()} / yr`;
+
+      const statusEl = document.getElementById('calcNetStatus');
+      if (netRatio >= 100) {
+        statusEl.textContent = `${netRatio}% NET NEGATIVE 🌱`;
+        statusEl.className = 'val-green';
+      } else {
+        statusEl.textContent = `${netRatio}% OF EMISSIONS SUNK`;
+        statusEl.className = 'val-gold';
+      }
+    }
+
+    // PWA Install Prompt Handler
+    let deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const installBtn = document.getElementById('pwaInstallTrigger');
+      if (installBtn) installBtn.style.display = 'inline-flex';
+    });
+
+    function triggerPWAInstall() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((res) => {
+          if (res.outcome === 'accepted') {
+            document.getElementById('pwaInstallTrigger').style.display = 'none';
+          }
+          deferredPrompt = null;
+        });
+      } else {
+        // Show iOS / Desktop helper sheet
+        document.getElementById('pwaModal').classList.add('open');
+      }
+    }
+
+    function closePWAModal() {
+      document.getElementById('pwaModal').classList.remove('open');
+    }
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('METAK Service Worker active'))
+        .catch((err) => console.log('SW registration error:', err));
+    }
+
+    // Initial calculation run
+    runCalculator();
   </script>
 </body>
 </html>
